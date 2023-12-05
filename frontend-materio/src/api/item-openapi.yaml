@@ -1,0 +1,171 @@
+---
+openapi: 3.0.2
+info:
+  title: Item
+  version: 0.0.1
+  description: API definition of item
+  contact:
+    name: creator's name
+    url: 'http://creator.homepage.address'
+    email: creator@creator.com
+  license:
+    name: MIT License
+    url: 'https://opensource.org/licenses/MIT'
+paths:
+  /items:
+    summary: Global operations on items
+    get:
+      tags:
+        - items
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+              examples:
+                items_json:
+                  value:
+                    - id: 1
+                      itemName: A string
+                      itemCode: A string
+                      itemUnit: value
+          description: Get list of items
+      operationId: GetItem
+      summary: Get list of items
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+            examples:
+              '1':
+                value:
+                  id: 1
+                  itemName: A string
+                  itemCode: A string
+                  itemUnit: value
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+              examples:
+                '1':
+                  value:
+                    id: 1
+                    itemName: A string
+                    itemCode: A string
+                    itemUnit: value
+          description: Changed Item
+      operationId: Post Item
+      summary: Post Item
+  '/items/{id}':
+    summary: Specific operation on items
+    get:
+      parameters:
+        - examples:
+            '1':
+              value: 1
+          name: id
+          description: Item name
+          schema:
+            type: integer
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+              examples:
+                '1':
+                  value:
+                    id: 1
+                    itemName: A string
+                    itemCode: A string
+                    itemUnit: value
+          description: items with specified id
+      operationId: GetItemById
+      summary: Get Item by id
+      description: Get Item by id
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+            examples:
+              '1':
+                value:
+                  id: 1
+                  itemName: A string
+                  itemCode: A string
+                  itemUnit: value
+        required: true
+      parameters:
+        - examples:
+            '1':
+              value: 1
+          name: id
+          description: Item name
+          schema:
+            type: integer
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+              examples:
+                '1':
+                  value:
+                    id: 1
+                    itemName: A string
+                    itemCode: A string
+                    itemUnit: value
+          description: Changed Item
+      operationId: PatchItem
+      summary: Patch existing Item
+    parameters:
+      - name: id
+        description: Item id
+        schema:
+          type: integer
+        in: path
+        required: true
+components:
+  schemas:
+    Item:
+      title: Root Type for Item
+      description: The root of the Item type's schema.
+      type: object
+      properties:
+        id:
+          description: id of this Item
+          type: integer
+        itemName:
+          description: itemName of this Item
+          type: string
+        itemCode:
+          description: itemCode of this Item
+          type: string
+        itemUnit:
+          description: itemUnit of this Item
+          type: string
+      example:
+        id: 1
+        itemName: A string
+        itemCode: A string
+        itemUnit: value
+tags:
+  - name: Item
+    description: Item resource

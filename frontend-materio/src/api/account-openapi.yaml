@@ -1,0 +1,201 @@
+---
+openapi: 3.0.2
+info:
+  title: Account
+  version: 0.0.1
+  description: API definition of account
+  contact:
+    name: creator's name
+    url: 'http://creator.homepage.address'
+    email: creator@creator.com
+  license:
+    name: MIT License
+    url: 'https://opensource.org/licenses/MIT'
+paths:
+  /accounts:
+    summary: Global operations on accounts
+    get:
+      tags:
+        - accounts
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+              examples:
+                accounts_json:
+                  value:
+                    - businessRegistrationNumber: A string
+                      accountName: A string
+                      representative: A string
+                      address: value
+                      industry: A string
+                      category: A string
+                      customerType: A string
+          description: Get list of accounts
+      operationId: GetAccount
+      summary: Get list of accounts
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+            examples:
+              '1':
+                value:
+                  businessRegistrationNumber: A string
+                  accountName: A string
+                  representative: A string
+                  address: value
+                  industry: A string
+                  category: A string
+                  customerType: A string
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+              examples:
+                '1':
+                  value:
+                    businessRegistrationNumber: A string
+                    accountName: A string
+                    representative: A string
+                    address: value
+                    industry: A string
+                    category: A string
+                    customerType: A string
+          description: Changed Account
+      operationId: Post Account
+      summary: Post Account
+  '/accounts/{id}':
+    summary: Specific operation on accounts
+    get:
+      parameters:
+        - examples:
+            A string:
+              value: A string
+          name: id
+          description: Account name
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+              examples:
+                '1':
+                  value:
+                    businessRegistrationNumber: A string
+                    accountName: A string
+                    representative: A string
+                    address: value
+                    industry: A string
+                    category: A string
+                    customerType: A string
+          description: accounts with specified id
+      operationId: GetAccountById
+      summary: Get Account by id
+      description: Get Account by id
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+            examples:
+              '1':
+                value:
+                  businessRegistrationNumber: A string
+                  accountName: A string
+                  representative: A string
+                  address: value
+                  industry: A string
+                  category: A string
+                  customerType: A string
+        required: true
+      parameters:
+        - examples:
+            '1':
+              value: 1
+          name: businessRegistrationNumber
+          description: Account name
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+              examples:
+                '1':
+                  value:
+                    businessRegistrationNumber: A string
+                    accountName: A string
+                    representative: A string
+                    address: value
+                    industry: A string
+                    category: A string
+                    customerType: A string
+          description: Changed Account
+      operationId: PatchAccount
+      summary: Patch existing Account
+    parameters:
+      - name: id
+        description: Account id
+        schema:
+          type: string
+        in: path
+        required: true
+components:
+  schemas:
+    Account:
+      title: Root Type for Account
+      description: The root of the Account type's schema.
+      type: object
+      properties:
+        businessRegistrationNumber:
+          description: businessRegistrationNumber of this Account
+          type: string
+        accountName:
+          description: accountName of this Account
+          type: string
+        representative:
+          description: representative of this Account
+          type: string
+        address:
+          description: address of this Account
+          type: string
+        industry:
+          description: industry of this Account
+          type: string
+        category:
+          description: category of this Account
+          type: string
+        customerType:
+          description: customerType of this Account
+          type: string
+      example:
+        businessRegistrationNumber: A string
+        accountName: A string
+        representative: A string
+        address: value
+        industry: A string
+        category: A string
+        customerType: A string
+tags:
+  - name: Account
+    description: Account resource

@@ -1,0 +1,276 @@
+---
+paths:
+  '/purchases/{id}/sale':
+    summary: sale operation on purchases
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                itemId:
+                  description: itemId of this Sale
+                  type: string
+                qty:
+                  description: qty of this Sale
+                  type: integer
+            examples:
+              Example 0:
+                value:
+                  itemId: N/A
+                  qty: N/A
+      parameters:
+        - name: id
+          description: Sale name
+          schema:
+            type: integer
+          in: path
+          required: true
+          examples:
+            Example 0:
+              value: null
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+              examples:
+                Example 0:
+                  value:
+                    itemId: N/A
+                    stock: N/A
+          description: Sale Operation
+      operationId: Sale
+      summary: Sale
+      description: Sale
+  /purchases:
+    summary: Global operations on purchases
+    get:
+      tags:
+        - purchases
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Purchase'
+              examples:
+                purchases_json:
+                  value:
+                    - purchaseNo: 1
+                      purchaseType: A string
+                      purchaseDate: value
+                      warehouseArrivalDate: value
+                      storageFeePaymentDate: value
+                      storageFeePaymentStatus: value
+                      mainShipName: A string
+                      productName: A string
+                      accountId: value
+                      purchaseDetails: value
+          description: Get list of purchases
+      operationId: GetPurchase
+      summary: Get list of purchases
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Purchase'
+            examples:
+              '1':
+                value:
+                  purchaseNo: 1
+                  purchaseType: A string
+                  purchaseDate: value
+                  warehouseArrivalDate: value
+                  storageFeePaymentDate: value
+                  storageFeePaymentStatus: value
+                  mainShipName: A string
+                  productName: A string
+                  accountId: value
+                  purchaseDetails: value
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+              examples:
+                '1':
+                  value:
+                    purchaseNo: 1
+                    purchaseType: A string
+                    purchaseDate: value
+                    warehouseArrivalDate: value
+                    storageFeePaymentDate: value
+                    storageFeePaymentStatus: value
+                    mainShipName: A string
+                    productName: A string
+                    accountId: value
+                    purchaseDetails: value
+          description: Changed Purchase
+      operationId: Post Purchase
+      summary: Post Purchase
+  '/purchases/{id}':
+    summary: Specific operation on purchases
+    get:
+      parameters:
+        - examples:
+            '1':
+              value: 1
+          name: id
+          description: Purchase name
+          schema:
+            type: integer
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+              examples:
+                '1':
+                  value:
+                    purchaseNo: 1
+                    purchaseType: A string
+                    purchaseDate: value
+                    warehouseArrivalDate: value
+                    storageFeePaymentDate: value
+                    storageFeePaymentStatus: value
+                    mainShipName: A string
+                    productName: A string
+                    accountId: value
+                    purchaseDetails: value
+          description: purchases with specified id
+      operationId: GetPurchaseById
+      summary: Get Purchase by id
+      description: Get Purchase by id
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Purchase'
+            examples:
+              '1':
+                value:
+                  purchaseNo: 1
+                  purchaseType: A string
+                  purchaseDate: value
+                  warehouseArrivalDate: value
+                  storageFeePaymentDate: value
+                  storageFeePaymentStatus: value
+                  mainShipName: A string
+                  productName: A string
+                  accountId: value
+                  purchaseDetails: value
+        required: true
+      parameters:
+        - examples:
+            '1':
+              value: 1
+          name: purchaseNo
+          description: Purchase name
+          schema:
+            type: integer
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+              examples:
+                '1':
+                  value:
+                    purchaseNo: 1
+                    purchaseType: A string
+                    purchaseDate: value
+                    warehouseArrivalDate: value
+                    storageFeePaymentDate: value
+                    storageFeePaymentStatus: value
+                    mainShipName: A string
+                    productName: A string
+                    accountId: value
+                    purchaseDetails: value
+          description: Changed Purchase
+      operationId: PatchPurchase
+      summary: Patch existing Purchase
+    parameters:
+      - name: id
+        description: Purchase id
+        schema:
+          type: integer
+        in: path
+        required: true
+openapi: 3.0.2
+info:
+  title: Purchase
+  version: 0.0.1
+  description: API definition of purchase
+  contact:
+    name: creator's name
+    url: 'http://creator.homepage.address'
+    email: creator@creator.com
+  license:
+    name: MIT License
+    url: 'https://opensource.org/licenses/MIT'
+components:
+  schemas:
+    Purchase:
+      title: Root Type for Purchase
+      description: The root of the Purchase type's schema.
+      type: object
+      properties:
+        purchaseNo:
+          description: purchaseNo of this Purchase
+          type: integer
+        purchaseType:
+          description: purchaseType of this Purchase
+          type: string
+        purchaseDate:
+          description: purchaseDate of this Purchase
+          type: string
+        warehouseArrivalDate:
+          description: warehouseArrivalDate of this Purchase
+          type: string
+        storageFeePaymentDate:
+          description: storageFeePaymentDate of this Purchase
+          type: string
+        storageFeePaymentStatus:
+          description: storageFeePaymentStatus of this Purchase
+          type: string
+        mainShipName:
+          description: mainShipName of this Purchase
+          type: string
+        productName:
+          description: productName of this Purchase
+          type: string
+        accountId:
+          description: accountId of this Purchase
+          type: string
+        purchaseDetails:
+          description: purchaseDetails of this Purchase
+          type: string
+      example:
+        purchaseNo: 1
+        purchaseType: A string
+        purchaseDate: value
+        warehouseArrivalDate: value
+        storageFeePaymentDate: value
+        storageFeePaymentStatus: value
+        mainShipName: A string
+        productName: A string
+        accountId: value
+        purchaseDetails: value
+tags:
+  - name: Purchase
+    description: Purchase resource

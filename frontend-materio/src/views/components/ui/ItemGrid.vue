@@ -12,7 +12,7 @@
         </v-snackbar>
         <div class="panel">
             <div class="gs-bundle-of-buttons" style="max-height:10vh;">
-                <v-btn @click="addNewRow" @class="contrast-primary-text" small color="primary">
+                <v-btn @click="addNewRow" class="contrast-primary-text" small color="primary">
                     <v-icon small style="margin-left: -5px;">mdi-plus</v-icon>등록
                 </v-btn>
                 <v-btn style="margin-left: 5px;" @click="editSelectedRow()" class="contrast-primary-text" small color="primary">

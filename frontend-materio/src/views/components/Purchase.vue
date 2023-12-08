@@ -8,8 +8,8 @@
         <Boolean label="보관료부담여부" v-model="value.storageFeePaymentStatus" :editMode="editMode"/>
         <String label="본선명" v-model="value.mainShipName" :editMode="editMode"/>
         <String label="품명" v-model="value.productName" :editMode="editMode"/>
-        <AccountId offline label="거래처" v-model="value.accountId" :editMode="editMode" @change="change"/>
-        <PurchaseDetailDetailGrid label="PurchaseDetails" offline v-model="value.purchaseDetails" :editMode="editMode" @change="change"/>
+        <!-- <AccountId offline label="거래처" v-model="value.accountId" :editMode="editMode" @change="change"/>
+        <PurchaseDetailDetailGrid label="PurchaseDetails" offline v-model="value.purchaseDetails" :editMode="editMode" @change="change"/> -->
 
         <v-divider class="border-opacity-100 my-divider"></v-divider>
         <v-layout row justify-end>
@@ -32,8 +32,8 @@ import Number from './primitives/Number.vue'
 import String from './primitives/String.vue'
 import Date from './primitives/Date.vue'
 import Boolean from './primitives/Boolean.vue'
-import AccountId from './AccountId.vue'
-import PurchaseDetailDetailGrid from './ui/PurchaseDetailDetailGrid.vue'
+// import AccountId from './AccountId.vue'
+// import PurchaseDetailDetailGrid from './ui/PurchaseDetailDetailGrid.vue'
 
 export default {
     name: 'Purchase',
@@ -43,8 +43,8 @@ export default {
         String,
         Date,
         Boolean,
-        AccountId,
-        PurchaseDetailDetailGrid,
+        // AccountId,
+        // PurchaseDetailDetailGrid,
     },
     
     data: () => ({

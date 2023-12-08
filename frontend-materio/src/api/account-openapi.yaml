@@ -25,16 +25,16 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Account'
-              examples:
-                accounts_json:
-                  value:
-                    - businessRegistrationNumber: A string
-                      accountName: A string
-                      representative: A string
-                      address: value
-                      industry: A string
-                      category: A string
-                      customerType: A string
+              # examples:
+              #   accounts_json:
+              #     value:
+              #       - businessRegistrationNumber: A string
+              #         accountName: A string
+              #         representative: A string
+              #         address: value
+              #         industry: A string
+              #         category: A string
+              #         customerType: A string
           description: Get list of accounts
       operationId: GetAccount
       summary: Get list of accounts
@@ -44,16 +44,16 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Account'
-            examples:
-              '1':
-                value:
-                  businessRegistrationNumber: A string
-                  accountName: A string
-                  representative: A string
-                  address: value
-                  industry: A string
-                  category: A string
-                  customerType: A string
+            # examples:
+            #   '1':
+            #     value:
+            #       businessRegistrationNumber: A string
+            #       accountName: A string
+            #       representative: A string
+            #       address: value
+            #       industry: A string
+            #       category: A string
+            #       customerType: A string
         required: true
       responses:
         '200':
@@ -61,16 +61,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Account'
-              examples:
-                '1':
-                  value:
-                    businessRegistrationNumber: A string
-                    accountName: A string
-                    representative: A string
-                    address: value
-                    industry: A string
-                    category: A string
-                    customerType: A string
+              # examples:
+              #   '1':
+              #     value:
+              #       businessRegistrationNumber: null
+              #       accountName: null
+              #       representative: null
+              #       address: null
+              #       industry: null
+              #       category: null
+              #       customerType: null
           description: Changed Account
       operationId: Post Account
       summary: Post Account
@@ -188,14 +188,6 @@ components:
         customerType:
           description: customerType of this Account
           type: string
-      example:
-        businessRegistrationNumber: A string
-        accountName: A string
-        representative: A string
-        address: value
-        industry: A string
-        category: A string
-        customerType: A string
 tags:
   - name: Account
     description: Account resource

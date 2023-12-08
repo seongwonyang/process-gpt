@@ -1,5 +1,4 @@
 <script setup>
-import logo from '@images/logo.svg?raw'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { useDisplay } from 'vuetify'
 
@@ -60,7 +59,7 @@ const handleNavScroll = evt => {
         >
           <v-icon>mdi-home</v-icon>
           <h1 class="font-weight-medium leading-normal text-xl text-uppercase">
-            untitled
+            erp-example
           </h1>
         </RouterLink>
       </slot>

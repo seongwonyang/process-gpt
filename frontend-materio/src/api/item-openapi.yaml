@@ -25,13 +25,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Item'
-              examples:
-                items_json:
-                  value:
-                    - id: 1
-                      itemName: A string
-                      itemCode: A string
-                      itemUnit: value
+              # examples:
+              #   items_json:
+              #     value:
+              #       - id: 1
+              #         itemName: A string
+              #         itemCode: A string
+              #         itemUnit: value
           description: Get list of items
       operationId: GetItem
       summary: Get list of items
@@ -41,13 +41,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Item'
-            examples:
-              '1':
-                value:
-                  id: 1
-                  itemName: A string
-                  itemCode: A string
-                  itemUnit: value
+            # examples:
+            #   '1':
+            #     value:
+            #       id: 1
+            #       itemName: A string
+            #       itemCode: A string
+            #       itemUnit: value
         required: true
       responses:
         '200':
@@ -55,13 +55,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Item'
-              examples:
-                '1':
-                  value:
-                    id: 1
-                    itemName: A string
-                    itemCode: A string
-                    itemUnit: value
+              # examples:
+              #   '1':
+              #     value:
+              #       id: 1
+              #       itemName: A string
+              #       itemCode: A string
+              #       itemUnit: value
           description: Changed Item
       operationId: Post Item
       summary: Post Item
@@ -161,11 +161,6 @@ components:
         itemUnit:
           description: itemUnit of this Item
           type: string
-      example:
-        id: 1
-        itemName: A string
-        itemCode: A string
-        itemUnit: value
 tags:
   - name: Item
     description: Item resource

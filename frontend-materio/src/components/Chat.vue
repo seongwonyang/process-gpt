@@ -85,6 +85,7 @@
                         v-model="newMessage"
                         @keydown.enter="sendMessage"
                         label="Send Message"
+                        autofocus
                         dense
                         class="px-2"
                 >
@@ -109,6 +110,7 @@ import apiSpec from "../api/openapi.js";
 
 import BaseRepository from "../repository/BaseRepository";
 import axios from "@axios";
+import JSONFormatter from 'json-formatter-js'; 
 
 export default {
     name: 'Chat',
@@ -140,7 +142,7 @@ export default {
         },
         init() {
             this.generator.previousMessages = [{
-            role: 'system',
+            role: 'system', 
             content: `
 시스템과 사용자간 챗봇을 제공하려고 해.
 
@@ -153,7 +155,7 @@ CONSTRAINTS:
 
 COMMANDS:
 
-commands are described with OpenAPI3 as below:
+The commands, arguments, and specifications are described with OpenAPI3 as below:
 ${apiSpec}
 
 ERRORS:
@@ -177,7 +179,7 @@ RESPONSE FORMAT:
             "key": "value"
         },
         "path": "api path",
-        "method": "http Method" // in capital letters
+        "method": "http Method" // in capital letters only
     },
     "thoughts": {
         "text": "thought",
@@ -188,9 +190,14 @@ RESPONSE FORMAT:
     },
     "error": {
         "name": "error name",
-        "speak": "error message to user"
+        "speak": "error message to user",
     }
 }]
+
+CAUTIONS:
+1. If you are unsure about any of arguments from user input, please encapsulate the details in "thoughts" and respond.
+2. Learn from the "components.schemas" in the OpenAPI YAML to ensure no missing arguments occur when the user inputs message.
+3. If you are a unsure value about the arguments belonging to "components.schemas", it's considered as an error with the code "INCOMPLETE-ARGS".
 `
             }];
         },
@@ -213,31 +220,14 @@ RESPONSE FORMAT:
         },
 
         onGenerationFinished(responses){
-            console.log(responses);
+            // console.log(responses);
             this.loading = false;
             var message;
 
             responses.forEach(response=> {
-                if (response.command) {
-                    message = {
-                        role:'system',
-                        text: response.thoughts && response.thoughts.speak ? response.thoughts.speak 
-                            : response.command.name + "을 다음의 아규먼트로 실행합니다: ", 
-                                // + JSON.stringify(response.command.args),
-                        command: response.command
-                    };
+                console.log(response);
 
-                    this.messages.push(message);
-
-                } else if (response.markdown) {
-                    message = {
-                        role:'system',
-                        text: response.markdown.replace(/(?:\r\n|\r|\n)/g, '<br />')
-                    };
-
-                    this.messages.push(message);
-
-                }  else if (response.error) {
+                if (response.error) {
                     message = {
                         role:'system',
                         text: response.error.speak ? response.error.speak : response.error
@@ -246,10 +236,88 @@ RESPONSE FORMAT:
                     this.messages.push(message);
 
                 }
+                else if (response.command) {
+                    if (response.thoughts) {
+                        // if (response.thoughts.plan && response.thoughts.plan.length > 0) {
+                        //     response.thoughts.plan.forEach((planMsg, index) => {
+                        //         message = {
+                        //             role:'system',
+                        //             text: planMsg
+                        //         };
+
+                        //         if (index == response.thoughts.plan.length-1) {
+                        //             message.command = response.command
+                        //         }
+
+                        //         this.messages.push(message);
+                        //     })
+                        // }
+
+                        if (response.thoughts.criticism) {
+                            message = {
+                                role:'system',
+                                text: response.thoughts.criticism,
+                            };
+
+                            this.messages.push(message);
+                        }
+
+                        if (response.thoughts.speak) {
+                            message = {
+                                role:'system',
+                                text: response.thoughts.speak,
+                                command: response.command
+                            };
+
+                            this.messages.push(message);
+
+                        }
+                    }
+
+                    if (!message && response.command) {
+                        message = {
+                            role:'system',
+                            text: response.command.name + "을 다음의 아규먼트로 실행합니다: "
+                                + JSON.stringify(response.command.args),
+                            command: response.command
+                        };
+
+                        this.messages.push(message);
+                    }
+                }
+                else if (response.markdown) {
+                    message = {
+                        role:'system',
+                        text: response.markdown.replace(/(?:\r\n|\r|\n)/g, '<br />')
+                    };
+
+                    this.messages.push(message);
+
+                }
             });
         },
 
-        async doit(message){
+        onError(error) {
+            this.loading = false;
+
+            if (error.code === "invalid_api_key") {
+                var apiKey = prompt("API Key 를 입력하세요.");
+                localStorage.setItem("openAIToken", apiKey);
+                
+                this.generator.generate();
+                
+            } else {
+                console.log(error)
+                var message = {
+                    role:'system',
+                    text: error.message
+                };
+
+                this.messages.push(message);
+            }
+        },
+
+        async doit(message) {
             this.loading = true;
 
             if (message.command.method === 'GET') {
@@ -266,7 +334,7 @@ RESPONSE FORMAT:
                     }
                 }).catch(error => {
                     if (error.response) {
-                        this.handleException(error);
+                        this.onError(error);
                     } else {
                         this.loading = false;
                         var message = {
@@ -318,19 +386,6 @@ ${value}
             this.newMessage = "";
         },
 
-        async handleException(error) {
-            if (error.response.data && error.response.data.message) {
-                await this.init();
-                this.newMessage = `
-Respond by resolving the error message below:
-${error.response.data.message}
-`;
-                await this.generator.generate();
-
-                this.newMessage = "";
-            }
-        },
-
     }
 }
 </script>
@@ -359,9 +414,8 @@ ${error.response.data.message}
     padding: 5px;
 }
 .user-message {
-    background: #2196F3;
+    background: #9155FD;
     color: #ffffff;
-    font-size: 16px;
     font-weight: bold;
     padding: 12px;
     border-radius: 20px;
@@ -369,10 +423,14 @@ ${error.response.data.message}
 
 .system-message {
     background: #eeeeee;
-    font-size: 16px;
     font-weight: bold;
     padding: 12px;
     border-radius: 20px;
+    max-width: 280px;
+}
+
+.system-message > div {
+    max-width: 180px;
 }
 
 .message-box {

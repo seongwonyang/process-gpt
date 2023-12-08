@@ -23,7 +23,7 @@ const props = defineProps({
       />
       <!-- 👉 Title -->
       <span class="nav-item-title">
-        
+        {{ item.title }}
       </span>
     </Component>
   </li>

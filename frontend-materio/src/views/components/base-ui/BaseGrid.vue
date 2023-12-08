@@ -130,7 +130,10 @@ export default {
         changeSelectedRow(val){
             this.selectedRow = val
         },
-        
+        editSelectedRow() {
+            this.openDialog = true;
+            this.selectedRow
+        }
        
     },
 }

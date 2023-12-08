@@ -58,7 +58,7 @@
                     </tbody>
                 </v-table>
             </div>
-            <PurchaseDetailDetailGrid style="margin-top: 20px;" label="PurchaseDetails" offline v-if="selectedRow" v-model="selectedRow.purchaseDetails" :selectedRow="selectedRow"/>
+            <!-- <PurchaseDetailDetailGrid style="margin-top: 20px;" label="PurchaseDetails" offline v-if="selectedRow" v-model="selectedRow.purchaseDetails" :selectedRow="selectedRow"/> -->
         </div>
         <v-col>
             <v-dialog
@@ -119,7 +119,7 @@
 import BaseGrid from '../base-ui/BaseGrid.vue'
 
 import Purchase from '../Purchase.vue'
-import PurchaseDetailDetailGrid from './PurchaseDetailDetailGrid.vue'
+// import PurchaseDetailDetailGrid from './PurchaseDetailDetailGrid.vue'
 
 
 export default {
@@ -127,7 +127,7 @@ export default {
     mixins:[BaseGrid],
     components:{
         Purchase,
-        PurchaseDetailDetailGrid,
+        // PurchaseDetailDetailGrid,
     },
     data: () => ({
         path: 'purchases',

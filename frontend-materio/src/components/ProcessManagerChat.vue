@@ -1,7 +1,15 @@
 <template>
     <div>
-        
+        <vue-bpmn v-if="processDefinition" :key="processDefinition.length"
+                                :bpmn="bpmn"
+                                :options="options"
+                                v-on:error="handleError"
+                                v-on:shown="handleShown"
+                                v-on:loading="handleLoading"
+                            ></vue-bpmn>
+
         <v-card class="chat-open-box">
+
             <v-card-text class="message-box" ref="messages">
                 <div v-for="(message, index) in messages"
                         :key="index"
@@ -44,13 +52,6 @@
                             <div v-html="message.text"></div>
                         </div>
                         <br>
-                        <vue-bpmn v-if="message.bpmn" :key="message.bpmn.length"
-                                :bpmn="message.bpmn"
-                                :options="options"
-                                v-on:error="handleError"
-                                v-on:shown="handleShown"
-                                v-on:loading="handleLoading"
-                            ></vue-bpmn>
                     </div>
                 </div>
 
@@ -129,9 +130,7 @@ export default {
         loading: false,
         openChatBox: false,
         processDefinition: null,
-        bpmn: `
-<?xml version="1.0" encoding="UTF-8"?><bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Custom BPMN Modeler" exporterVersion="1.0"><bpmn:process id="vacationRequestProcess" isExecutable="true"><bpmn:task id="vacationRequestActivity" name="휴가 신청"/><bpmn:task id="approvalActivity" name="휴가 신청 승인"/><bpmn:task id="remainingDaysActivity" name="휴가 잔여일 확인"/><bpmn:task id="notificationActivity" name="휴가 통지"/><bpmn:sequenceFlow id="SequenceFlow_vacationRequestActivity_approvalActivity" sourceRef="vacationRequestActivity" targetRef="approvalActivity"/><bpmn:sequenceFlow id="SequenceFlow_approvalActivity_remainingDaysActivity" sourceRef="approvalActivity" targetRef="remainingDaysActivity"/><bpmn:sequenceFlow id="SequenceFlow_remainingDaysActivity_notificationActivity" sourceRef="remainingDaysActivity" targetRef="notificationActivity"/></bpmn:process><bpmndi:BPMNDiagram id="BPMNDiagram_1"><bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="vacationRequestProcess"><bpmndi:BPMNShape id="BPMNShape_vacationRequestActivity" bpmnElement="vacationRequestActivity"><dc:Bounds xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" x="100" y="100" width="100" height="80"/></bpmndi:BPMNShape><bpmndi:BPMNShape id="BPMNShape_approvalActivity" bpmnElement="approvalActivity"><dc:Bounds xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" x="250" y="100" width="100" height="80"/></bpmndi:BPMNShape><bpmndi:BPMNShape id="BPMNShape_remainingDaysActivity" bpmnElement="remainingDaysActivity"><dc:Bounds xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" x="400" y="100" width="100" height="80"/></bpmndi:BPMNShape><bpmndi:BPMNShape id="BPMNShape_notificationActivity" bpmnElement="notificationActivity"><dc:Bounds xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" x="550" y="100" width="100" height="80"/></bpmndi:BPMNShape><bpmndi:BPMNEdge id="BPMNEdge_vacationRequestActivity_approvalActivity" bpmnElement="SequenceFlow_vacationRequestActivity_approvalActivity"><di:waypoint xmlns:di="http://www.omg.org/spec/DD/20100524/DI" x="150" y="140"/><di:waypoint xmlns:di="http://www.omg.org/spec/DD/20100524/DI" x="250" y="140"/></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="BPMNEdge_approvalActivity_remainingDaysActivity" bpmnElement="SequenceFlow_approvalActivity_remainingDaysActivity"><di:waypoint xmlns:di="http://www.omg.org/spec/DD/20100524/DI" x="150" y="140"/><di:waypoint xmlns:di="http://www.omg.org/spec/DD/20100524/DI" x="250" y="140"/></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="BPMNEdge_remainingDaysActivity_notificationActivity" bpmnElement="SequenceFlow_remainingDaysActivity_notificationActivity"><di:waypoint xmlns:di="http://www.omg.org/spec/DD/20100524/DI" x="150" y="140"/><di:waypoint xmlns:di="http://www.omg.org/spec/DD/20100524/DI" x="250" y="140"/></bpmndi:BPMNEdge></bpmndi:BPMNPlane></bpmndi:BPMNDiagram></bpmn:definitions>        `
-    }),
+        bpmn: null    }),
     created() {
         this.generator = new ChatGenerator(this, {
             isStream: true,
@@ -199,6 +198,7 @@ console.log(jsonProcess)
                 this.processDefinition = jsonProcess
 
                 messageWriting.bpmn = this.createBpmnXml(jsonProcess)
+                this.bpmn = messageWriting.bpmn
 //messageWriting.bpmn = `<?xml version="1.0" encoding="UTF-8"?><bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Custom BPMN Modeler" exporterVersion="1.0"><bpmn:process id="휴가신청프로세스" isExecutable="true"><bpmn:task id="휴가신청" name="휴가신청"/><bpmn:task id="휴가승인" name="휴가승인"/><bpmn:task id="허용여부통지" name="허용여부통지"/><bpmn:sequenceFlow id="SequenceFlow_휴가신청_휴가승인" sourceRef="휴가신청" targetRef="휴가승인"/><bpmn:sequenceFlow id="SequenceFlow_휴가승인_허용여부통지" sourceRef="휴가승인" targetRef="허용여부통지"/></bpmn:process><bpmndi:BPMNDiagram id="BPMNDiagram_1"><bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="휴가신청프로세스"><bpmndi:BPMNShape id="BPMNShape_휴가신청" bpmnElement="휴가신청"><dc:Bounds xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" x="100" y="100" width="100" height="80"/></bpmndi:BPMNShape><bpmndi:BPMNShape id="BPMNShape_휴가승인" bpmnElement="휴가승인"><dc:Bounds xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" x="250" y="100" width="100" height="80"/></bpmndi:BPMNShape><bpmndi:BPMNShape id="BPMNShape_허용여부통지" bpmnElement="허용여부통지"><dc:Bounds xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" x="400" y="100" width="100" height="80"/></bpmndi:BPMNShape><bpmndi:BPMNEdge id="BPMNEdge_휴가신청_휴가승인" bpmnElement="SequenceFlow_휴가신청_휴가승인"><di:waypoint xmlns:di="http://www.omg.org/spec/DD/20100524/DI" x="150" y="140"/><di:waypoint xmlns:di="http://www.omg.org/spec/DD/20100524/DI" x="250" y="140"/></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="BPMNEdge_휴가승인_허용여부통지" bpmnElement="SequenceFlow_휴가승인_허용여부통지"><di:waypoint xmlns:di="http://www.omg.org/spec/DD/20100524/DI" x="150" y="140"/><di:waypoint xmlns:di="http://www.omg.org/spec/DD/20100524/DI" x="250" y="140"/></bpmndi:BPMNEdge></bpmndi:BPMNPlane></bpmndi:BPMNDiagram></bpmn:definitions>`
             
                 console.log(messageWriting.bpmn)
@@ -307,12 +307,12 @@ console.log(jsonProcess)
         },
 
         extractJSON(text) {            
-            const regex = /```xml\s*([\s\S]*?)(?:\n\s*```|$)/;
+            const regex = /```json\s*([\s\S]*?)(?:\n\s*```|$)/;
             const match = text.match(regex);
             return match ? match[1].trim() : null;
         },
         extractXML(text) {            
-            const regex = /```json\s*([\s\S]*?)(?:\n\s*```|$)/;
+            const regex = /```xml\s*([\s\S]*?)(?:\n\s*```|$)/;
             const match = text.match(regex);
             return match ? match[1].trim() : null;
         },
@@ -526,11 +526,11 @@ ${value}
 .chat-open-box {
     position: fixed;
     z-index: 999;
-    bottom: 90px;
+    bottom: 50px;
     right: 15px;
     width: 1000px;
     max-width: 1200px;
-    height: 800px;
+    height: 600px;
     max-height: 600px;
     padding: 5px;
 }

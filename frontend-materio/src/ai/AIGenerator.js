@@ -64,7 +64,7 @@ export default class AIGenerator {
                 me.stopSignaled = false;
                 me.state = 'stopped'
             }
-         console.log("Received " + event.loaded + " bytes of data.");
+         //console.log("Received " + event.loaded + " bytes of data.");
         // console.log("Data: " + xhr.responseText);
             const newUpdates = xhr.responseText
             .replace("data: [DONE]", "")

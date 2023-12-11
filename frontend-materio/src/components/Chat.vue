@@ -20,6 +20,9 @@
                             class="d-flex justify-end my-2"
                     >
                         <div class="user-message">
+
+                            
+
                             {{ message.text }} 
                         </div>
                         <div class="ml-1">
@@ -49,14 +52,15 @@
                         </div>
                         <div class="d-flex system-message">
                             <div v-html="message.text"></div>
-                            <v-btn v-if="message.command"
-                                    @click="doit(message)"
-                                    color="success"
-                                    class="mx-1"
-                            >
-                                실행
-                            </v-btn>
                         </div>
+
+                        <vue-bpmn v-if="message.bpmn"
+                                :xml="message.bpmn"
+                                :options="options"
+                                v-on:error="handleError"
+                                v-on:shown="handleShown"
+                                v-on:loading="handleLoading"
+                            ></vue-bpmn>
                     </div>
                 </div>
 
@@ -81,6 +85,8 @@
             </v-card-text>
 
             <v-card-actions class="chat-box">
+                
+                            
                 <v-text-field
                         v-model="newMessage"
                         @keydown.enter="sendMessage"
@@ -111,15 +117,20 @@ import apiSpec from "../api/openapi.js";
 import BaseRepository from "../repository/BaseRepository";
 import axios from "@axios";
 import JSONFormatter from 'json-formatter-js'; 
+import VueBpmn from './Bpmn.vue';
 
 export default {
     name: 'Chat',
+    components: {
+        VueBpmn
+    },
     data: () => ({
         messages: [],
         newMessage: "",
         generator: null,
         loading: false,
         openChatBox: false,
+        bpmn: ``
     }),
     created() {
         this.generator = new ChatGenerator(this, {
@@ -141,65 +152,7 @@ export default {
             this.openChatBox = !this.openChatBox;
         },
         init() {
-            this.generator.previousMessages = [{
-            role: 'system', 
-            content: `
-시스템과 사용자간 챗봇을 제공하려고 해.
-
-CONSTRAINTS:
-
-1. ~4000 word limit for short term memory. Your short term memory is short, so immediately save important information to files.
-2. If you are unsure how you previously did something or want to recall past events, thinking about similar events will help you remember.
-3. If you are unsure about any of arguments from user input, you have to create an error for user to know which argument should be input again.
-4. Exclusively use the commands listed in double quotes e.g. "command name"
-
-COMMANDS:
-
-The commands, arguments, and specifications are described with OpenAPI3 as below:
-${apiSpec}
-
-ERRORS:
-
-1. Incomplete Arguments: "INCOMPLETE-ARGS"
-
-PERFORMANCE EVALUATION:
-
-1. Continuously review and analyze your actions to ensure you are performing to the best of your abilities.
-2. Constructively self-criticize your big-picture behavior constantly.
-3. Reflect on past decisions and strategies to refine your approach.
-4. Every command has a cost, so be smart and efficient. Aim to complete tasks in the least number of steps.
-
-You should only respond in JSON format as described below (don't skip the thoughts and speak at least)
-
-RESPONSE FORMAT:
-[{
-    "command": {
-        "name": "command name",
-        "args":{
-            "key": "value"
-        },
-        "path": "api path",
-        "method": "http Method" // in capital letters only
-    },
-    "thoughts": {
-        "text": "thought",
-        "reasoning": "reasoning",
-        "plan": [short bulleted,list that conveys,long-term plan],
-        "criticism": "constructive self-criticism",
-        "speak": "thoughts summary to say to user"
-    },
-    "error": {
-        "name": "error name",
-        "speak": "error message to user",
-    }
-}]
-
-CAUTIONS:
-1. If you are unsure about any of arguments from user input, please encapsulate the details in "thoughts" and respond.
-2. Learn from the "components.schemas" in the OpenAPI YAML to ensure no missing arguments occur when the user inputs message.
-3. If you are a unsure value about the arguments belonging to "components.schemas", it's considered as an error with the code "INCOMPLETE-ARGS".
-`
-            }];
+            
         },
 
         sendMessage() {
@@ -215,8 +168,51 @@ CAUTIONS:
                 );
 
                 this.generator.generate();
+    
+
+                this.messages.push({
+                    role:'system',
+                    text: '.'
+                });
+
                 this.newMessage = "";
             }
+        },
+
+        onModelCreated(response){
+
+            let messageWriting = this.messages[this.messages.length -1]
+            messageWriting.text = response
+
+            debugger;
+            let bpmn = this.extractXML(response)
+            if(!bpmn)
+                bpmn = this.extractBPMN(response)
+            if(!bpmn)
+                bpmn = this.extractCode(response)
+
+console.log(bpmn)
+
+            if(bpmn){
+                messageWriting.bpmn = bpmn
+            }
+
+        },
+
+        extractXML(text) {            
+            const regex = /```xml\s*([\s\S]*?)(?:\n\s*```|$)/;
+            const match = text.match(regex);
+            return match ? match[1].trim() : null;
+        },
+        extractBPMN(text) {
+            const regex = /```bpmn\s*([\s\S]*?)(?:\n\s*```|$)/;
+            const match = text.match(regex);
+            return match ? match[1].trim() : null;
+        },
+        extractCode(text) {
+            const regex = /```\s*([\s\S]*?)(?:\n\s*```|$)/;
+            const match = text.match(regex);
+            return match ? match[1].trim() : null;
         },
 
         onGenerationFinished(responses){
@@ -224,77 +220,77 @@ CAUTIONS:
             this.loading = false;
             var message;
 
-            responses.forEach(response=> {
-                console.log(response);
+            // responses.forEach(response=> {
+            //     console.log(response);
 
-                if (response.error) {
-                    message = {
-                        role:'system',
-                        text: response.error.speak ? response.error.speak : response.error
-                    };
+            //     if (response.error) {
+            //         message = {
+            //             role:'system',
+            //             text: response.error.speak ? response.error.speak : response.error
+            //         };
 
-                    this.messages.push(message);
+            //         this.messages.push(message);
 
-                }
-                else if (response.command) {
-                    if (response.thoughts) {
-                        // if (response.thoughts.plan && response.thoughts.plan.length > 0) {
-                        //     response.thoughts.plan.forEach((planMsg, index) => {
-                        //         message = {
-                        //             role:'system',
-                        //             text: planMsg
-                        //         };
+            //     }
+            //     else if (response.command) {
+            //         if (response.thoughts) {
+            //             // if (response.thoughts.plan && response.thoughts.plan.length > 0) {
+            //             //     response.thoughts.plan.forEach((planMsg, index) => {
+            //             //         message = {
+            //             //             role:'system',
+            //             //             text: planMsg
+            //             //         };
 
-                        //         if (index == response.thoughts.plan.length-1) {
-                        //             message.command = response.command
-                        //         }
+            //             //         if (index == response.thoughts.plan.length-1) {
+            //             //             message.command = response.command
+            //             //         }
 
-                        //         this.messages.push(message);
-                        //     })
-                        // }
+            //             //         this.messages.push(message);
+            //             //     })
+            //             // }
 
-                        if (response.thoughts.criticism) {
-                            message = {
-                                role:'system',
-                                text: response.thoughts.criticism,
-                            };
+            //             if (response.thoughts.criticism) {
+            //                 message = {
+            //                     role:'system',
+            //                     text: response.thoughts.criticism,
+            //                 };
 
-                            this.messages.push(message);
-                        }
+            //                 this.messages.push(message);
+            //             }
 
-                        if (response.thoughts.speak) {
-                            message = {
-                                role:'system',
-                                text: response.thoughts.speak,
-                                command: response.command
-                            };
+            //             if (response.thoughts.speak) {
+            //                 message = {
+            //                     role:'system',
+            //                     text: response.thoughts.speak,
+            //                     command: response.command
+            //                 };
 
-                            this.messages.push(message);
+            //                 this.messages.push(message);
 
-                        }
-                    }
+            //             }
+            //         }
 
-                    if (!message && response.command) {
-                        message = {
-                            role:'system',
-                            text: response.command.name + "을 다음의 아규먼트로 실행합니다: "
-                                + JSON.stringify(response.command.args),
-                            command: response.command
-                        };
+            //         if (!message && response.command) {
+            //             message = {
+            //                 role:'system',
+            //                 text: response.command.name + "을 다음의 아규먼트로 실행합니다: "
+            //                     + JSON.stringify(response.command.args),
+            //                 command: response.command
+            //             };
 
-                        this.messages.push(message);
-                    }
-                }
-                else if (response.markdown) {
-                    message = {
-                        role:'system',
-                        text: response.markdown.replace(/(?:\r\n|\r|\n)/g, '<br />')
-                    };
+            //             this.messages.push(message);
+            //         }
+            //     }
+            //     else if (response.markdown) {
+            //         message = {
+            //             role:'system',
+            //             text: response.markdown.replace(/(?:\r\n|\r|\n)/g, '<br />')
+            //         };
 
-                    this.messages.push(message);
+            //         this.messages.push(message);
 
-                }
-            });
+            //     }
+            // });
         },
 
         onError(error) {
@@ -407,10 +403,10 @@ ${value}
     z-index: 999;
     bottom: 90px;
     right: 15px;
-    width: 400px;
-    max-width: 400px;
-    height: 500px;
-    max-height: 500px;
+    width: 1000px;
+    max-width: 1200px;
+    height: 800px;
+    max-height: 600px;
     padding: 5px;
 }
 .user-message {

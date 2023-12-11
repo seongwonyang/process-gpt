@@ -41,7 +41,7 @@ export default {
           link: "/items",
       },
       {
-          text: "매입",
+          text: "할 일",
           link: "/purchases",
       },
     ],

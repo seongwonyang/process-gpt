@@ -68,6 +68,7 @@ export default class ProcessDefinitionGenerator extends AIGenerator{
              inputData: [{“name”: “name of process data input”, “value”: “real value of the process instance”}],
              currentRoleMapping: “the real user name of mapped role”,
              nextRoleMapping: “the real user name of next activity’s role”
+             nextActivityId: “the id of next activity”
             }
             
             

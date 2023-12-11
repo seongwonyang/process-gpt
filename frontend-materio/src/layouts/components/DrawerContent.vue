@@ -23,7 +23,7 @@ import {
         <VerticalNavSectionTitle :item="{ heading: 'Purchase' }" />
         <VerticalNavLink
             :item="{
-                title: '매입',
+                title: '할 일',
                 to: 'purchases',
             }"
         />

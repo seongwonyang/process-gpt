@@ -18,14 +18,14 @@
                 <v-btn style="margin-left: 5px;" @click="editSelectedRow()" class="contrast-primary-text" small color="primary">
                     <v-icon small>mdi-pencil</v-icon>수정
                 </v-btn>
-                <v-btn style="margin-left: 5px;" @click="saleDialog = true" class="contrast-primary-text" small color="primary" >
-                    <v-icon small>mdi-minus-circle-outline</v-icon>sale
+                <v-btn style="margin-left: 5px;" @click="updateTaskDialog = true" class="contrast-primary-text" small color="primary" :disabled="!hasRole('User')">
+                    <v-icon small>mdi-minus-circle-outline</v-icon>작업 수정
                 </v-btn> 
-                <v-dialog v-model="saleDialog" width="500">
-                    <SaleCommand
-                        @closeDialog="saleDialog = false"
-                        @sale="sale"
-                    ></SaleCommand>
+                <v-dialog v-model="updateTaskDialog" width="500">
+                    <UpdateTaskCommand
+                        @closeDialog="updateTaskDialog = false"
+                        @updateTask="updateTask"
+                    ></UpdateTaskCommand>
                 </v-dialog>
             </div>
             <div class="mb-5 text-lg font-bold"></div>
@@ -34,31 +34,32 @@
                     <thead>
                         <tr>
                         <th>Id</th>
-                        <th>PurchaseType</th>
-                        <th>PurchaseDate</th>
-                        <th>WarehouseArrivalDate</th>
-                        <th>StorageFeePaymentDate</th>
-                        <th>StorageFeePaymentStatus</th>
-                        <th>MainShipName</th>
-                        <th>ProductName</th>
+                        <th>ActivityId</th>
+                        <th>ActivityName</th>
+                        <th>StartDate</th>
+                        <th>EndDate</th>
+                        <th>DueDate</th>
+                        <th>ProcessDefinitionId</th>
+                        <th>ProcessInstanceId</th>
+                        <th>UserId</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(val, idx) in value" :key="val" @click="changeSelectedRow(val)" :style="val === selectedRow ? 'background-color: #f0f3ff;':''">
                             <td class="font-semibold">{{ idx + 1 }}</td>
-                            <td class="whitespace-nowrap" label="매입구분">{{ val.purchaseType }}</td>
-                            <td class="whitespace-nowrap" label="매입일자">{{ val.purchaseDate }}</td>
-                            <td class="whitespace-nowrap" label="입고일자">{{ val.warehouseArrivalDate }}</td>
-                            <td class="whitespace-nowrap" label="보관료부담일자">{{ val.storageFeePaymentDate }}</td>
-                            <td class="whitespace-nowrap" label="보관료부담여부">{{ val.storageFeePaymentStatus }}</td>
-                            <td class="whitespace-nowrap" label="본선명">{{ val.mainShipName }}</td>
-                            <td class="whitespace-nowrap" label="품명">{{ val.productName }}</td>
+                            <td class="whitespace-nowrap" label="ActivityId">{{ val.activityId }}</td>
+                            <td class="whitespace-nowrap" label="ActivityName">{{ val.activityName }}</td>
+                            <td class="whitespace-nowrap" label="시작일">{{ val.startDate }}</td>
+                            <td class="whitespace-nowrap" label="완료일">{{ val.endDate }}</td>
+                            <td class="whitespace-nowrap" label="만료일">{{ val.dueDate }}</td>
+                            <td class="whitespace-nowrap" label="프로세스 정의 ID">{{ val.processDefinitionId }}</td>
+                            <td class="whitespace-nowrap" label="프로세스 인스턴스 ID">{{ val.processInstanceId }}</td>
+                            <td class="whitespace-nowrap" label="UserId">{{ val.userId }}</td>
                             <Icon style="margin-top: 15px;" icon="mi:delete" @click="deleteRow(val)" />
                         </tr>
                     </tbody>
                 </v-table>
             </div>
-            <!-- <PurchaseDetailDetailGrid style="margin-top: 20px;" label="PurchaseDetails" offline v-if="selectedRow" v-model="selectedRow.purchaseDetails" :selectedRow="selectedRow"/> -->
         </div>
         <v-col>
             <v-dialog
@@ -81,7 +82,7 @@
                         >mdi-close</v-icon>
                     </v-toolbar>
                     <v-card-text>
-                        <Purchase :offline="offline"
+                        <Task :offline="offline"
                             :isNew="!value.idx"
                             :editMode="true"
                             :inList="false"
@@ -118,29 +119,27 @@
 <script>
 import BaseGrid from '../base-ui/BaseGrid.vue'
 
-import Purchase from '../Purchase.vue'
-// import PurchaseDetailDetailGrid from './PurchaseDetailDetailGrid.vue'
+import Task from '../Task.vue'
 
 
 export default {
-    name: 'purchaseGrid',
+    name: 'taskGrid',
     mixins:[BaseGrid],
     components:{
-        Purchase,
-        // PurchaseDetailDetailGrid,
+        Task,
     },
     data: () => ({
-        path: 'purchases',
-        saleDialog: false,
+        path: 'tasks',
+        updateTaskDialog: false,
     }),
     watch: {
     },
     methods:{
-        sale(params){
+        updateTask(params){
             try{
-                this.repository.invoke(this.getSelectedItem(), "sale", params)
-                this.$EventBus.$emit('show-success','sale 성공적으로 처리되었습니다.')
-                this.saleDialog = false
+                this.repository.invoke(this.getSelectedItem(), "updateTask", params)
+                this.$EventBus.$emit('show-success','UpdateTask 성공적으로 처리되었습니다.')
+                this.updateTaskDialog = false
             }catch(e){
                 console.log(e)
             }

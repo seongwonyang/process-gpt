@@ -42,7 +42,7 @@
                         color="primary"
                         style="font-weight:700;"
                     >
-                        거래처
+                        프로세스 정의
                     </v-list-item>
 
                     <v-list-item
@@ -53,7 +53,7 @@
                         color="primary"
                         style="font-weight:700;"
                     >
-                        품목
+                        프로세스 실행
                     </v-list-item>
 
 
@@ -148,18 +148,14 @@ export default {
         ImageUrl: '',
         aggregate: [
             { 
-                title: '거래처', 
-                description: '다음의 정보를 관리하는 거래처 어그리거트: 거래처명, 대표자, 사업자 번호, 주소, 업종, 종목, 거래처구분', 
+                title: '프로세스 관리', 
+                description: '다음의 정보를 관리하는 프로세스 관리 어그리거트: 프로세스 관리명, 대표자, 사업자 번호, 주소, 업종, 종목, 프로세스 관리구분', 
                 key: 'accounts', 
                 route: '/masters/accounts',
                 ImageUrl: '',
             },
             { 
-                title: '품목', 
-                description: '다음의 품목정보를 관리하는 어그리거트:
-- 품명
-- 코드
-- 단위', 
+                title: '프로세스 실행', 
                 key: 'items', 
                 route: '/masters/items',
                 ImageUrl: '',

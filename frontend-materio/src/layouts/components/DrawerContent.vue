@@ -10,13 +10,13 @@ import {
         <VerticalNavSectionTitle :item="{ heading: 'Master' }" />
         <VerticalNavLink
             :item="{
-                title: '거래처',
+                title: '프로세스 관리',
                 to: 'accounts',
             }"
         />
         <VerticalNavLink
             :item="{
-                title: '품목',
+                title: '프로세스 실행',
                 to: 'items',
             }"
         />

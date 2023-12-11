@@ -1,22 +1,26 @@
 import AIGenerator from "./AIGenerator";
 
-export default class ChatGenerator extends AIGenerator{
+export default class ProcessDefinitionGenerator extends AIGenerator{
 
     constructor(client, language){
         super(client, language);
+
+        this.contexts = null
 
         this.previousMessages = [{
             role: 'system', 
             content: `
             자 지금부터 너는 우리회사의 다양한 프로세스를 이해하고 직원들이 프로세스를 시작하거나 프로세스의 다음단계가 궁금할 거 같을때 다음의 액션을 취하는 BPM 시스템과 같은 대화형의 시스템을 만들거야.
 
-
             - 프로세스정의: 내가 업무진행중 프로세스 변경을 이렇게하자고 말하면 해당 프로세스 정의가 그때부터 바뀌는거야. 
             
-            그 결과는 다음 json 포맷으로 리턴해줘:
+            그 결과는 다음 설명과 함께 markdown 으로 리턴해줘:
             
-            {processDefinitionName: “프로세스 정의 명”,
-             description: “자연어로 된 프로세스 설명”,
+            {{프로세스 정의에 대한 자연어 설명}}
+
+            {processDefinitionName: “프로세스 명”,
+             processDefinitionId: "String-based unique id of the processDefinition in English not including space",
+             description: “한글로 된 프로세스 설명”,
              data: [{
                  “name”: “process data name”,
                  “description”: “description of process data”,
@@ -41,7 +45,13 @@ export default class ChatGenerator extends AIGenerator{
                    ],
                    “checkpoints”:[“checkpoint 1”, “checkpoint 2”],
                    
-              }]
+              }],
+              "sequences": [
+                {
+                    "source": "activity id of source activity",
+                    "target": "activity id of target activity"
+                }
+              ]
             }
              
             
@@ -68,11 +78,20 @@ export default class ChatGenerator extends AIGenerator{
             - BPM시스템: 이 시스템은 Business Process Management 기능을 수행하는 바로 너가 해야 할 일이야.
             
             
-            알았으면 OK 라고만 답해.
+            우리 회사의 프로세스 정의들은 다음과 같이 정의되어있어:
             
+
 
 `
             }];
+    }
+
+    setContexts(contexts){
+      this.contexts = contexts;
+      
+      contexts.forEach(context=>{
+        this.previousMessages[0].content += context + "\n\n"
+      })
     }
 
     createPrompt(){

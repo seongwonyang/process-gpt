@@ -24,7 +24,7 @@
             <Boolean label="보관료부담여부" v-model="value.storageFeePaymentStatus" :editMode="editMode" :inputUI="'SELECT'"/>
             <String label="본선명" v-model="value.mainShipName" :editMode="editMode" :inputUI="'TEXT'"/>
             <String label="품명" v-model="value.productName" :editMode="editMode" :inputUI="'TEXT'"/>
-            <AccountId offline label="거래처" v-model="value.accountId" :editMode="editMode" @change="change"/>
+            <AccountId offline label="프로세스 관리" v-model="value.accountId" :editMode="editMode" @change="change"/>
             <List&lt;PurchaseDetail&gt; offline label="PurchaseDetails" v-model="value.purchaseDetails" :editMode="editMode" @change="change"/>
             <PurchaseDetailManager offline label="PurchaseDetails" v-model="value.purchaseDetails" :editMode="editMode" @change="change"/>
         </v-card-text>

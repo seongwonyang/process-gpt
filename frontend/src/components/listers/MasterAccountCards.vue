@@ -13,8 +13,8 @@
                         class="border-color"
                     >
                     </v-list-item-avatar>
-                    <h1 class="align-self-center ml-3">거래처</h1>
-                    <div class="secondary-text-color" style="margin-left:30px;">다음의 정보를 관리하는 거래처 어그리거트: 거래처명, 대표자, 사업자 번호, 주소, 업종, 종목, 거래처구분</div>
+                    <h1 class="align-self-center ml-3">프로세스 관리</h1>
+                    <div class="secondary-text-color" style="margin-left:30px;">다음의 정보를 관리하는 프로세스 관리 어그리거트: 프로세스 관리명, 대표자, 사업자 번호, 주소, 업종, 종목, 프로세스 관리구분</div>
                 </v-list-item>
             </v-row>
         </v-card>
@@ -66,7 +66,7 @@
                                 color="primary"
                                 style="font-weight:500; font-size:20px; padding:15px; border:solid 2px; max-width:250px; overflow:hidden"
                             >
-                                거래처 등록
+                                프로세스 관리 등록
                             </v-btn>
                         </v-card-actions>
                     </v-card>

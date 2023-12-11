@@ -14,8 +14,8 @@
                     >
                         <span class="material-symbols-outlined" style="font-size:60px; color:#9575CD;">inventory</span>
                     </v-list-item-avatar>
-                    <h1 class="align-self-center ml-3">품목</h1>
-                    <div class="secondary-text-color" style="margin-left:30px;">다음의 품목정보를 관리하는 어그리거트:
+                    <h1 class="align-self-center ml-3">프로세스 실행</h1>
+                    <div class="secondary-text-color" style="margin-left:30px;">다음의 프로세스 실행정보를 관리하는 어그리거트:
 - 품명
 - 코드
 - 단위</div>
@@ -70,7 +70,7 @@
                                 color="primary"
                                 style="font-weight:500; font-size:20px; padding:15px; border:solid 2px; max-width:250px; overflow:hidden"
                             >
-                                품목 등록
+                                프로세스 실행 등록
                             </v-btn>
                         </v-card-actions>
                     </v-card>

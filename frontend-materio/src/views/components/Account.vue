@@ -5,7 +5,7 @@
         <String label="대표자" v-model="value.representative" :editMode="editMode"/>
         <String label="업종" v-model="value.industry" :editMode="editMode"/>
         <String label="종목" v-model="value.category" :editMode="editMode"/>
-        <String label="거래처 구분" v-model="value.customerType" :editMode="editMode"/>
+        <String label="프로세스 관리 구분" v-model="value.customerType" :editMode="editMode"/>
         <Address offline label="주소" v-model="value.address" :editMode="editMode" @change="change"/>
 
         <v-divider class="border-opacity-100 my-divider"></v-divider>

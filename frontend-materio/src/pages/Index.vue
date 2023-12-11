@@ -33,11 +33,11 @@ export default {
   data: () => ({
     cards: [
       {
-          text: "거래처",
+          text: "프로세스 관리",
           link: "/accounts",
       },
       {
-          text: "품목",
+          text: "프로세스 실행",
           link: "/items",
       },
       {

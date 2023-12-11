@@ -8,7 +8,7 @@
         <Boolean label="보관료부담여부" v-model="value.storageFeePaymentStatus" :editMode="editMode"/>
         <String label="본선명" v-model="value.mainShipName" :editMode="editMode"/>
         <String label="품명" v-model="value.productName" :editMode="editMode"/>
-        <!-- <AccountId offline label="거래처" v-model="value.accountId" :editMode="editMode" @change="change"/>
+        <!-- <AccountId offline label="프로세스 관리" v-model="value.accountId" :editMode="editMode" @change="change"/>
         <PurchaseDetailDetailGrid label="PurchaseDetails" offline v-model="value.purchaseDetails" :editMode="editMode" @change="change"/> -->
 
         <v-divider class="border-opacity-100 my-divider"></v-divider>

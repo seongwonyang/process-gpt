@@ -9,10 +9,10 @@
         </template>
 
         <v-card-title v-if="value._links">
-            품목 # {{decode(value._links.self.href.split("/")[value._links.self.href.split("/").length - 1])}}
+            프로세스 실행 # {{decode(value._links.self.href.split("/")[value._links.self.href.split("/").length - 1])}}
         </v-card-title >
         <v-card-title v-else>
-            품목
+            프로세스 실행
         </v-card-title >        
 
         <v-card-text>
@@ -37,7 +37,7 @@
                     text
                     @click="save"
                 >
-                    품목 등록
+                    프로세스 실행 등록
                 </v-btn>
                 <v-btn
                     color="primary"

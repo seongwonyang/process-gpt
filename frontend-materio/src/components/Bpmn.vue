@@ -4,15 +4,15 @@
   
   <script>
     import BpmnJS from 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js';
-  
+    import BpmnModeler from 'bpmn-js/lib/Modeler';
+
     export default {
       name: 'vue-bpmn',
       props: {
         url: {
           type: String,
-          required: true
         },
-        xml: {
+        bpmn: {
             type: String,
         },
         options: {
@@ -29,9 +29,12 @@
   
         var self = this;
         var _options = Object.assign({
-          container: container
+          container: container,
+          keyboard: {
+            bindTo: window
+          }
         }, this.options)
-        this.bpmnViewer = new BpmnJS(_options);
+        this.bpmnViewer = new BpmnModeler(_options)//new BpmnJS(_options);  //
   
         this.bpmnViewer.on('import.done', function(event) {
   
@@ -49,8 +52,8 @@
   
         if (this.url) {
           this.fetchDiagram(this.url);
-        }else if(this.xml){
-            this.diagramXML = this.xml
+        }else if(this.bpmn){
+            this.diagramXML = this.bpmn
         }
       },
       beforeDestroy: function() {

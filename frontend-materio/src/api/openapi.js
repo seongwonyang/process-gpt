@@ -11,6 +11,9 @@ apiSpec += accountSpec;
 let itemSpec = YAML.stringify(itemYaml);
 apiSpec += itemSpec;
 
+let organizationSpec = YAML.stringify(itemYaml);
+apiSpec += organizationSpec;
+
 let purchaseSpec = YAML.stringify(purchaseYaml);
 apiSpec += purchaseSpec;
 

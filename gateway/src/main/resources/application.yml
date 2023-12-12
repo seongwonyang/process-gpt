@@ -17,6 +17,10 @@ spring:
           uri: http://localhost:8083
           predicates:
             - Path=/purchases/**, 
+        - id: purchase
+          uri: http://localhost:8084
+          predicates:
+            - Path=/organizations/**, 
         - id: frontend
           uri: http://localhost:8080
           predicates:

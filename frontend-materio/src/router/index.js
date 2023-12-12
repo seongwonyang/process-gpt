@@ -16,6 +16,10 @@ const router = createRouter({
       component: () => import('../views/components/ui/ItemGrid.vue'),
     },
     {
+      path: '/organizations',
+      component: () => import('../views/components/ui/OrganizationGrid.vue'),
+    },
+    {
       path: '/purchases',
       component: () => import('../views/components/ui/PurchaseGrid.vue'),
     },

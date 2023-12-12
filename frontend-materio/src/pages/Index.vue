@@ -41,6 +41,10 @@ export default {
           link: "/items",
       },
       {
+          text: "조직도 관리",
+          link: "/organizations",
+      },
+      {
           text: "할 일",
           link: "/purchases",
       },

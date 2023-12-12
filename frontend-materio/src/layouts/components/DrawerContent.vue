@@ -20,6 +20,12 @@ import {
                 to: 'items',
             }"
         />
+        <VerticalNavLink
+            :item="{
+                title: '조직도 관리',
+                to: 'organizations',
+            }"
+        />
         <VerticalNavSectionTitle :item="{ heading: 'Purchase' }" />
         <VerticalNavLink
             :item="{
